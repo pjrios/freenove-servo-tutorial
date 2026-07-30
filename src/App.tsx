@@ -10,7 +10,6 @@ type Stage = {
   instruction: string;
   checks?: string[];
   code?: string;
-  prompt?: string;
   tip?: string;
   image?: "connection" | "selector";
   video?: boolean;
@@ -18,6 +17,8 @@ type Stage = {
     text: string;
     options: string[];
     correct: number;
+    correctFeedback?: string;
+    incorrectFeedback?: string;
   };
 };
 
@@ -50,6 +51,10 @@ const stages: Stage[] = [
         "It does not use electrical energy.",
       ],
       correct: 0,
+      correctFeedback:
+        "Correct! A positional servo receives a control signal that tells it which angle to move to.",
+      incorrectFeedback:
+        "Not quite. Rewatch the section explaining how the motor receives a signal, then try again.",
     },
     tip: "In this project, Pot1 provides the input. Arduino maps that value to an angle and tells the servo where to move.",
   },
@@ -103,8 +108,15 @@ const stages: Stage[] = [
     instruction:
       "Type this first piece at the very top of your empty Arduino sketch. Do not copy code from a later stage.",
     code: `#include <Servo.h>\n\nServo myServo;`,
-    prompt:
-      "In your planning document, explain: What does the library add? What will myServo represent?",
+    question: {
+      text: "What do these two lines add to the sketch?",
+      options: [
+        "They load the Servo library and create a Servo object named myServo.",
+        "They read the potentiometer value from A1.",
+        "They move the servo immediately to 180 degrees.",
+      ],
+      correct: 0,
+    },
     tip: "The library gives Arduino the instructions needed to control a servo.",
   },
   {
@@ -114,8 +126,15 @@ const stages: Stage[] = [
     instruction:
       "Add these lines under the servo object. Using names makes the rest of the sketch easier to read.",
     code: `const int potPin = A1;\nconst int servoPin = 3;`,
-    prompt:
-      "In your planning document, identify which line represents the input and which represents the output.",
+    question: {
+      text: "Which pin name represents the input and which represents the output?",
+      options: [
+        "potPin on A1 is the input, and servoPin on 3 is the output.",
+        "servoPin on 3 is the input, and potPin on A1 is the output.",
+        "Both pins are outputs because both are named with const int.",
+      ],
+      correct: 0,
+    },
     tip: "const means these pin numbers will not change while the program runs.",
   },
   {
@@ -125,8 +144,15 @@ const stages: Stage[] = [
     instruction:
       "Start the setup function and attach the servo to its named pin. setup() runs only once when the Arduino starts.",
     code: `void setup() {\n  myServo.attach(servoPin);`,
-    prompt:
-      "Explain why attach() uses servoPin and why this instruction belongs inside setup().",
+    question: {
+      text: "Why does attach() use servoPin inside setup()?",
+      options: [
+        "It tells the Servo object which physical pin controls the servo, and setup() runs once at the start.",
+        "It reads the potentiometer repeatedly while the program runs.",
+        "It prints the servo angle to the Serial Monitor.",
+      ],
+      correct: 0,
+    },
     tip: "This tells the Servo object which physical signal pin it controls.",
   },
   {
@@ -136,8 +162,15 @@ const stages: Stage[] = [
     instruction:
       "Add this line beneath attach(), then close setup(). It creates a communication channel between the Arduino and the Serial Monitor.",
     code: `  Serial.begin(9600);\n}`,
-    prompt:
-      "What does 9600 represent, and why must the Serial Monitor use the same setting?",
+    question: {
+      text: "What does 9600 represent in Serial.begin(9600)?",
+      options: [
+        "The baud rate, or communication speed, that must match the Serial Monitor.",
+        "The maximum servo angle.",
+        "The analog input pin number.",
+      ],
+      correct: 0,
+    },
     tip: "9600 is the baud rate—the communication speed used by both the board and Serial Monitor.",
   },
   {
@@ -147,8 +180,15 @@ const stages: Stage[] = [
     instruction:
       "Start the loop and read the analog value from Pot1. The loop repeats while the Arduino is powered.",
     code: `void loop() {\n  int adcValue = analogRead(potPin);`,
-    prompt:
-      "Predict the minimum and maximum values that adcValue can store.",
+    question: {
+      text: "What range of values can adcValue store from analogRead(potPin)?",
+      options: [
+        "0 to 1023",
+        "0 to 180",
+        "3 to A1",
+      ],
+      correct: 0,
+    },
     tip: "Remember the Arduino analog range: 0 to 1023.",
   },
   {
@@ -158,8 +198,15 @@ const stages: Stage[] = [
     instruction:
       "Add this line inside loop(). It changes the potentiometer range into a range the servo can use.",
     code: `  int angle = map(adcValue, 0, 1023, 0, 180);`,
-    prompt:
-      "Explain what each range means: 0–1023 and 0–180.",
+    question: {
+      text: "What does map(adcValue, 0, 1023, 0, 180) do?",
+      options: [
+        "It converts the Pot1 reading range into a servo angle range.",
+        "It installs the Servo library.",
+        "It changes digital pin 3 into analog pin A1.",
+      ],
+      correct: 0,
+    },
     tip: "map() converts the input scale; it does not move the servo by itself.",
   },
   {
@@ -169,8 +216,15 @@ const stages: Stage[] = [
     instruction:
       "Use the calculated angle to move the servo. Keep loop() open because the next stages will add the Serial Monitor evidence.",
     code: `  myServo.write(angle);`,
-    prompt:
-      "Explain why servo.write() uses angle instead of the original adcValue.",
+    question: {
+      text: "Why does myServo.write() use angle instead of adcValue?",
+      options: [
+        "The servo expects an angle from 0 to 180, not a raw analog value from 0 to 1023.",
+        "adcValue is the same thing as servoPin.",
+        "The Servo library cannot use variables.",
+      ],
+      correct: 0,
+    },
     tip: "The servo expects an angle, not a raw analog value from 0 to 1023.",
   },
   {
@@ -180,8 +234,15 @@ const stages: Stage[] = [
     instruction:
       "Add these lines inside loop(). They label and print the original Pot1 reading.",
     code: `  Serial.print("Potentiometer: ");\n  Serial.print(adcValue);`,
-    prompt:
-      "Why is adcValue useful evidence even though it does not directly control the servo?",
+    question: {
+      text: "Why is adcValue useful evidence in the Serial Monitor?",
+      options: [
+        "It shows the raw input value from Pot1 before it is mapped to an angle.",
+        "It shows whether the Servo library is installed.",
+        "It shows the USB port name.",
+      ],
+      correct: 0,
+    },
     tip: "This lets you see the actual input value from 0 to 1023.",
   },
   {
@@ -191,8 +252,15 @@ const stages: Stage[] = [
     instruction:
       "Add the angle label and value, pause briefly, and close loop(). println() moves the next reading to a new line.",
     code: `  Serial.print(" | Servo angle: ");\n  Serial.println(angle);\n  delay(100);\n}`,
-    prompt:
-      "Explain the difference between Serial.print() and Serial.println(). Why is a short delay helpful?",
+    question: {
+      text: "What is the purpose of Serial.println(angle) and delay(100)?",
+      options: [
+        "println() prints the angle and moves to a new line; delay(100) slows the readings so they are easier to read.",
+        "println() installs the library; delay(100) sets the board to Arduino Uno.",
+        "println() moves the servo; delay(100) changes Pot1 to A1.",
+      ],
+      correct: 0,
+    },
     tip: "Each line will now show one input–output pair, such as Potentiometer: 512 | Servo angle: 90.",
   },
   {
@@ -236,8 +304,15 @@ const stages: Stage[] = [
       "Each line displays a potentiometer value and servo angle.",
       "As the potentiometer value increases, the mapped angle also increases.",
     ],
-    prompt:
-      "Predict the angle for an ADC value near 512, then compare your prediction with the displayed result.",
+    question: {
+      text: "What angle should an ADC value near 512 produce?",
+      options: [
+        "About 90 degrees",
+        "About 0 degrees",
+        "About 180 degrees",
+      ],
+      correct: 0,
+    },
     tip: "Approximately: 0 → 0°, 256 → 45°, 512 → 90°, 768 → 135°, and 1023 → 180°.",
   },
   {
@@ -252,8 +327,15 @@ const stages: Stage[] = [
       "High position: record ADC value, calculated angle, and observed position.",
       "Confirm that the servo movement matches the recorded values.",
     ],
-    prompt:
-      "Write one observation describing the relationship between Pot1, the ADC value, and the servo angle.",
+    question: {
+      text: "What relationship should your three tests show?",
+      options: [
+        "As Pot1 increases, the ADC value increases and the mapped servo angle increases.",
+        "As Pot1 increases, the ADC value always stays at 0.",
+        "The servo angle changes randomly and does not depend on Pot1.",
+      ],
+      correct: 0,
+    },
   },
   {
     short: "Explain",
@@ -268,8 +350,15 @@ const stages: Stage[] = [
       "Identify the servo on pin 3 as the output.",
       "Use at least three vocabulary words correctly.",
     ],
-    prompt:
-      "Vocabulary: servo, angle, signal, input, output, analog value, map.",
+    question: {
+      text: "Which explanation correctly describes the project?",
+      options: [
+        "Pot1 is the input, Arduino reads its analog value, maps it to an angle, and sends a signal to the servo output on pin 3.",
+        "The servo is the input, Arduino maps pin 3 to A1, and Pot1 prints the Serial Monitor.",
+        "The USB cable controls the angle directly without Arduino using the sketch.",
+      ],
+      correct: 0,
+    },
   },
   {
     short: "Submit",
@@ -301,7 +390,6 @@ export default function App() {
     group: "",
     date: "",
   });
-  const [writtenResponses, setWrittenResponses] = useState<Record<number, string>>({});
   const [finalSketch, setFinalSketch] = useState("");
 
   /* Restore the device-local tutorial session once after hydration. */
@@ -327,9 +415,6 @@ export default function App() {
           date: String(data.studentInfo.date || ""),
         });
       }
-      if (data.writtenResponses && typeof data.writtenResponses === "object") {
-        setWrittenResponses(data.writtenResponses);
-      }
       setFinalSketch(String(data.finalSketch || ""));
     } catch {
       window.localStorage.removeItem("servo-guided-v4");
@@ -345,19 +430,10 @@ export default function App() {
         confirmed,
         quizAnswers,
         studentInfo,
-        writtenResponses,
         finalSketch,
       }),
     );
-  }, [
-    started,
-    current,
-    confirmed,
-    quizAnswers,
-    studentInfo,
-    writtenResponses,
-    finalSketch,
-  ]);
+  }, [started, current, confirmed, quizAnswers, studentInfo, finalSketch]);
 
   const stage = stages[current];
   const quizCorrect =
@@ -369,14 +445,11 @@ export default function App() {
       studentInfo.group.trim() &&
       studentInfo.date,
     );
-  const writtenResponseComplete =
-    !stage.prompt || Boolean(writtenResponses[current]?.trim());
   const finalCodeStage = stage.short === "Complete Code";
   const finalSketchComplete = !finalCodeStage || Boolean(finalSketch.trim());
   const canConfirm =
     quizCorrect &&
     studentInfoComplete &&
-    writtenResponseComplete &&
     finalSketchComplete;
   const progress = useMemo(
     () => Math.round((confirmed.filter(Boolean).length / stages.length) * 100),
@@ -567,8 +640,8 @@ export default function App() {
               {quizAnswers[current] !== undefined && (
                 <p className={quizCorrect ? "quiz-correct" : "quiz-incorrect"} role="status">
                   {quizCorrect
-                    ? "Correct! A positional servo receives a control signal that tells it which angle to move to."
-                    : "Not quite. Rewatch the section explaining how the motor receives a signal, then try again."}
+                    ? stage.question.correctFeedback || "Correct. Continue when the stage evidence is complete."
+                    : stage.question.incorrectFeedback || "Not quite. Review the instruction and try again."}
                 </p>
               )}
             </fieldset>
@@ -630,30 +703,6 @@ export default function App() {
             </div>
           )}
 
-          {stage.prompt && (
-            <div className="thinking-box">
-              <span>✎ Sketch-planning checkpoint</span>
-              <p>{stage.prompt}</p>
-              <label className="response-field">
-                <span>Your response</span>
-                <textarea
-                  onChange={(event) =>
-                    setWrittenResponses((responses) => ({
-                      ...responses,
-                      [current]: event.target.value,
-                    }))
-                  }
-                  placeholder={
-                    stage.short === "Test"
-                      ? "Example starter: When I turn Pot1…"
-                      : "Write your answer in your own words…"
-                  }
-                  value={writtenResponses[current] || ""}
-                />
-              </label>
-            </div>
-          )}
-
           {stage.tip && <div className="tip-box"><b>Remember</b><p>{stage.tip}</p></div>}
 
           <label className="confirmation">
@@ -672,9 +721,7 @@ export default function App() {
                     ? "Enter your full name, group, and date to unlock this confirmation."
                     : !finalSketchComplete
                       ? "Paste your complete assembled Arduino sketch to unlock this confirmation."
-                      : !writtenResponseComplete
-                        ? "Write your response to the checkpoint to unlock this confirmation."
-                    : "I can show or explain the required evidence."}
+                      : "I can show or explain the required evidence."}
               </small>
             </span>
           </label>
