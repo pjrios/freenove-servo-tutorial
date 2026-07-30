@@ -86,14 +86,15 @@ const stages: Stage[] = [
     eyebrow: "Stage 5 · Arduino IDE check",
     title: "Check the Servo library",
     instruction:
-      "The official Servo library is normally already included with the Arduino IDE. Check for it before writing the first code piece; install it only if it is missing.",
+      "A library is a set of extra code that gives Arduino new commands. The Servo library gives Arduino the commands needed to control a servo motor. First select Arduino Uno as the board, then check for the Servo example before writing the first code piece; install the library only if it is missing.",
     checks: [
+      "Open Tools → Board and select Arduino AVR Boards → Arduino Uno.",
       "Open File → Examples and look for Servo.",
       "If Servo appears, it is already available—do not reinstall it.",
       "If it is missing, open Tools → Manage Libraries… (or the Library Manager icon).",
       "Search for Servo, choose the official Servo library by Arduino, and select Install.",
     ],
-    tip: "If the IDE later reports “Servo.h: No such file or directory,” return to Library Manager and install Servo.",
+    tip: "When your sketch later uses #include <Servo.h>, it is asking Arduino IDE to load the Servo library.",
   },
   {
     short: "Include",
