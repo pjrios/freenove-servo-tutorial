@@ -7,6 +7,7 @@ type Stage = {
   short: string;
   eyebrow: string;
   title: string;
+  learningGoal: string;
   instruction: string;
   checks?: string[];
   code?: string;
@@ -27,6 +28,7 @@ const stages: Stage[] = [
     short: "Prepare",
     eyebrow: "Step 1 · Before touching the board",
     title: "Get ready",
+    learningGoal: "Prepare your materials and work safely before the board has power.",
     instruction:
       "Before building, make sure your work area is ready. The board should stay disconnected from USB until the tutorial tells you to connect it.",
     checks: [
@@ -40,6 +42,7 @@ const stages: Stage[] = [
     short: "Meet Servo",
     eyebrow: "Step 2 · Introduction",
     title: "What is a servo motor?",
+    learningGoal: "Explain that a servo moves to a position chosen by Arduino.",
     instruction:
       "A servo is a small motor that can turn to a chosen position. In this project, Arduino will send the servo a signal that tells it what angle to move to.",
     video: true,
@@ -60,6 +63,7 @@ const stages: Stage[] = [
     short: "Connect",
     eyebrow: "Step 3 · Hardware",
     title: "Connect only the servo",
+    learningGoal: "Identify the servo wires and connect the servo safely.",
     instruction:
       "The servo has three wires: ground, power, and signal. Connect it to the three-pin servo connector for pin 3 while the board is still disconnected.",
     checks: [
@@ -74,6 +78,7 @@ const stages: Stage[] = [
     short: "Set Pot1",
     eyebrow: "Step 4 · Input",
     title: "Set Pot1 to A1",
+    learningGoal: "Explain that Pot1 is the knob Arduino will read as the input.",
     instruction:
       "Pot1 is the knob already built into the Freenove Projects Board. Set it to A1 so Arduino can read the knob position.",
     checks: [
@@ -88,6 +93,7 @@ const stages: Stage[] = [
     short: "Library",
     eyebrow: "Step 5 · Arduino IDE check",
     title: "Check the Servo library",
+    learningGoal: "Explain what a library does and find the Servo library in Arduino IDE.",
     instruction:
       "A library is extra code that gives Arduino new commands. The Servo library gives Arduino the commands needed to control a servo motor. Select Arduino Uno first, then check if the Servo example is already available.",
     checks: [
@@ -103,6 +109,7 @@ const stages: Stage[] = [
     short: "Include",
     eyebrow: "Step 6 · Code piece 1",
     title: "Add the Servo library and object",
+    learningGoal: "Recognize the two lines that prepare the sketch to control a servo.",
     instruction:
       "This first code piece loads the Servo library and creates a servo object named myServo. Type it at the top of your sketch.",
     code: `#include <Servo.h>\n\nServo myServo;`,
@@ -121,6 +128,7 @@ const stages: Stage[] = [
     short: "Pins",
     eyebrow: "Step 7 · Code piece 2",
     title: "Name the two pins",
+    learningGoal: "Identify A1 as the knob input and pin 3 as the servo output.",
     instruction:
       "These lines give simple names to the two pins. Pot1 uses A1 as the input. The servo uses pin 3 as the output.",
     code: `const int potPin = A1;\nconst int servoPin = 3;`,
@@ -139,6 +147,7 @@ const stages: Stage[] = [
     short: "Setup",
     eyebrow: "Step 8 · Code piece 3",
     title: "Attach the servo",
+    learningGoal: "Explain how the sketch tells Arduino which pin controls the servo.",
     instruction:
       "setup() runs one time when Arduino starts. In this step, you tell Arduino that myServo is connected to servoPin.",
     code: `void setup() {\n  myServo.attach(servoPin);`,
@@ -157,6 +166,7 @@ const stages: Stage[] = [
     short: "Start Serial",
     eyebrow: "Step 9 · Code piece 4",
     title: "Start serial communication",
+    learningGoal: "Explain how Arduino sends values to the Serial Monitor.",
     instruction:
       "Serial Monitor lets you see values from the board on the computer. 9600 is the communication speed you will use later.",
     code: `  Serial.begin(9600);\n}`,
@@ -175,6 +185,7 @@ const stages: Stage[] = [
     short: "Read",
     eyebrow: "Step 10 · Code piece 5",
     title: "Read Pot1",
+    learningGoal: "Explain how Arduino reads the knob as a number from 0 to 1023.",
     instruction:
       "loop() repeats while the board is powered. This line reads the knob position from Pot1 and stores a number from 0 to 1023 in adcValue.",
     code: `void loop() {\n  int adcValue = analogRead(potPin);`,
@@ -193,6 +204,7 @@ const stages: Stage[] = [
     short: "Map",
     eyebrow: "Step 11 · Code piece 6",
     title: "Convert the value into an angle",
+    learningGoal: "Explain how the knob number becomes a servo angle.",
     instruction:
       "The knob reading goes from 0 to 1023. The servo angle goes from 0 to 180. map() changes the knob value into an angle.",
     code: `  int angle = map(adcValue, 0, 1023, 0, 180);`,
@@ -211,6 +223,7 @@ const stages: Stage[] = [
     short: "Move",
     eyebrow: "Step 12 · Code piece 7",
     title: "Move the servo",
+    learningGoal: "Explain how the sketch sends the chosen angle to the servo.",
     instruction:
       "Now the servo can move. This line sends the calculated angle from 0 to 180 to myServo instead of sending the original Pot1 value from 0 to 1023.",
     code: `  myServo.write(angle);`,
@@ -229,6 +242,7 @@ const stages: Stage[] = [
     short: "Print ADC",
     eyebrow: "Step 13 · Code piece 8",
     title: "Print the raw input",
+    learningGoal: "Recognize the original knob number in the Serial Monitor.",
     instruction:
       "Printing adcValue lets you see the original knob reading before it becomes a servo angle.",
     code: `  Serial.print("Potentiometer: ");\n  Serial.print(adcValue);`,
@@ -247,6 +261,7 @@ const stages: Stage[] = [
     short: "Print Angle",
     eyebrow: "Step 14 · Code piece 9",
     title: "Print the mapped angle",
+    learningGoal: "Compare the knob number with the servo angle shown on screen.",
     instruction:
       "Printing angle lets you compare the knob reading with the angle sent to the servo. A short delay makes the Serial Monitor easier to read.",
     code: `  Serial.print(" | Servo angle: ");\n  Serial.println(angle);\n  delay(100);\n}`,
@@ -265,6 +280,7 @@ const stages: Stage[] = [
     short: "Complete Code",
     eyebrow: "Step 15 · Assemble your work",
     title: "Show your complete sketch",
+    learningGoal: "Combine the code pieces and check that the full sketch is complete.",
     instruction:
       "You have now built the sketch one piece at a time. Paste the complete program here so you can review it before uploading.",
     checks: [
@@ -280,6 +296,7 @@ const stages: Stage[] = [
     short: "Upload",
     eyebrow: "Step 16 · Arduino IDE",
     title: "Verify and upload",
+    learningGoal: "Check the sketch for errors and send it to the correct board.",
     instruction:
       "Now connect the USB cable. Select the correct board and port, then verify and upload the sketch.",
     checks: [
@@ -294,6 +311,7 @@ const stages: Stage[] = [
     short: "Monitor",
     eyebrow: "Step 17 · Make the mapping visible",
     title: "Open and read the Serial Monitor",
+    learningGoal: "Use the Serial Monitor to see how the knob controls the servo angle.",
     instruction:
       "Open Serial Monitor after the upload. Turn Pot1 slowly and watch how the knob value changes with the servo angle. A middle knob value near 512 should produce an angle near 90 degrees.",
     checks: [
@@ -317,6 +335,7 @@ const stages: Stage[] = [
     short: "Test",
     eyebrow: "Step 18 · Evidence",
     title: "Complete three controlled tests",
+    learningGoal: "Collect clear evidence that the system works at low, middle, and high positions.",
     instruction:
       "Test the system in three positions: low, middle, and high. Use real values from the Serial Monitor.",
     checks: [
@@ -339,6 +358,7 @@ const stages: Stage[] = [
     short: "Explain",
     eyebrow: "Step 19 · English explanation",
     title: "Prepare your explanation",
+    learningGoal: "Explain the project as an input, a change made by Arduino, and an output.",
     instruction:
       "Prepare a short explanation in your own words. Focus on what enters the system, what Arduino does, and what moves at the end.",
     checks: [
@@ -362,6 +382,7 @@ const stages: Stage[] = [
     short: "Submit",
     eyebrow: "Step 20 · Final check",
     title: "Save, demonstrate, and submit",
+    learningGoal: "Present your group's finished work and evidence clearly.",
     instruction:
       "Before asking for evaluation, make sure your code, test evidence, demonstration, and workspace are ready.",
     checks: [
@@ -537,6 +558,7 @@ export default function App() {
                       </span>
                       <b>Step {index + 1}: {item.title}</b>
                     </div>
+                    <p><b>Learning goal:</b> {item.learningGoal}</p>
                     <p><b>Context:</b> {item.instruction}</p>
                     {item.checks && (
                       <ul>
@@ -642,6 +664,10 @@ export default function App() {
           <div className="stage-count">Step {current + 1} of {stages.length}</div>
           <p className="step-eyebrow">{stage.eyebrow}</p>
           <h1>{stage.title}</h1>
+          <section className="learning-goal" aria-label="Learning goal">
+            <span>What you will learn</span>
+            <p>{stage.learningGoal}</p>
+          </section>
           <section className="context-box" aria-label="Step context">
             <span>Step context</span>
             <p>{stage.instruction}</p>
