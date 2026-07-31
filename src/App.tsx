@@ -377,6 +377,7 @@ const stages: Stage[] = [
 
 export default function App() {
   const [started, setStarted] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   const [current, setCurrent] = useState(0);
   const [confirmed, setConfirmed] = useState<boolean[]>(
     () => stages.map(() => false),
@@ -466,6 +467,18 @@ export default function App() {
     window.setTimeout(() => setCopied(false), 1400);
   }
 
+  function selectedAnswer(index: number) {
+    const question = stages[index].question;
+    const answerIndex = quizAnswers[index];
+    if (!question || answerIndex === undefined) return "Not answered";
+    return question.options[answerIndex] || "Not answered";
+  }
+
+  function openReport() {
+    setShowReport(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   function next() {
     if (!confirmed[current]) return;
     setCurrent((value) => Math.min(value + 1, stages.length - 1));
@@ -479,6 +492,74 @@ export default function App() {
       setCurrent((value) => value - 1);
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  if (showReport) {
+    return (
+      <main className="app-shell report-shell">
+        <header className="topbar report-topbar">
+          <div className="brand">
+            <span className="brand-mark">AID</span>
+            <span><b>Servo Tutorial Report</b><small>Summative #4</small></span>
+          </div>
+          <button className="back-button" onClick={() => setShowReport(false)} type="button">
+            Back to tutorial
+          </button>
+        </header>
+
+        <section className="report-page">
+          <div className="report-actions">
+            <button className="next-button" onClick={() => window.print()} type="button">
+              Print full report
+            </button>
+          </div>
+
+          <article className="report-document">
+            <header className="report-heading">
+              <p>Academia Internacional David · Technology & Robotics</p>
+              <h1>Freenove Servo Tutorial Report</h1>
+              <dl>
+                <div><dt>Name</dt><dd>{studentInfo.fullName || "Not entered"}</dd></div>
+                <div><dt>Group</dt><dd>{studentInfo.group || "Not entered"}</dd></div>
+                <div><dt>Date</dt><dd>{studentInfo.date || "Not entered"}</dd></div>
+                <div><dt>Progress</dt><dd>{progress}% complete</dd></div>
+              </dl>
+            </header>
+
+            <section className="report-section">
+              <h2>Full Tutorial Record</h2>
+              <ol className="report-steps">
+                {stages.map((item, index) => (
+                  <li key={item.short}>
+                    <div className="report-step-heading">
+                      <span className={confirmed[index] ? "complete" : "incomplete"}>
+                        {confirmed[index] ? "Complete" : "Incomplete"}
+                      </span>
+                      <b>Step {index + 1}: {item.title}</b>
+                    </div>
+                    <p><b>Context:</b> {item.instruction}</p>
+                    {item.checks && (
+                      <ul>
+                        {item.checks.map((check) => <li key={check}>{check}</li>)}
+                      </ul>
+                    )}
+                    {item.code && <pre className="report-code small">{item.code}</pre>}
+                    {item.question && (
+                      <p><b>Practice answer:</b> {selectedAnswer(index)}</p>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            <section className="report-section">
+              <h2>Complete Arduino Sketch</h2>
+              <pre className="report-code">{finalSketch || "No sketch pasted yet."}</pre>
+            </section>
+          </article>
+        </section>
+      </main>
+    );
   }
 
   if (!started) {
@@ -717,7 +798,7 @@ export default function App() {
               type="checkbox"
             />
             <span>
-              <b>I completed this stage.</b>
+              <b>I completed this step.</b>
               <small>
                 {!quizCorrect
                   ? "Practice is optional. Review the context if your answer was not correct."
@@ -725,7 +806,7 @@ export default function App() {
                     ? "Enter your full name, group, and date to unlock this confirmation."
                     : !finalSketchComplete
                       ? "Paste your complete assembled Arduino sketch to unlock this confirmation."
-                      : "I can show or explain the required evidence."}
+                      : "I can show or explain the required work."}
               </small>
             </span>
           </label>
@@ -738,12 +819,12 @@ export default function App() {
               Next: {stages[current + 1].short} →
             </button>
           ) : (
-            <button className="next-button" disabled={!confirmed[current]} onClick={() => window.print()} type="button">
-              ✓ Finished · Print
+            <button className="next-button" disabled={!confirmed[current]} onClick={openReport} type="button">
+              View full report
             </button>
           )}
         </nav>
-        {!confirmed[current] && <p className="unlock-note">Confirm the stage above to unlock Next.</p>}
+        {!confirmed[current] && <p className="unlock-note">Confirm the step above to unlock Next.</p>}
       </section>
     </main>
   );
