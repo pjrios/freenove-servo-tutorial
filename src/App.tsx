@@ -25,23 +25,23 @@ type Stage = {
 const stages: Stage[] = [
   {
     short: "Prepare",
-    eyebrow: "Stage 1 · Before touching the board",
-    title: "Are you prepared?",
+    eyebrow: "Step 1 · Before touching the board",
+    title: "Get ready",
     instruction:
-      "Do not connect anything yet. Prepare your information, equipment, and work area first.",
+      "Before building, make sure your work area is ready. The board should stay disconnected from USB until the tutorial tells you to connect it.",
     checks: [
       "Confirm that your Freenove kit number matches the assigned kit.",
       "Have your computer, charger, Arduino IDE, and assigned document ready.",
       "Keep the Freenove board disconnected from USB.",
     ],
-    tip: "You should not continue until your full name, group, date, and all three preparation items are complete.",
+    tip: "This step prevents connection mistakes before the board has power.",
   },
   {
     short: "Meet Servo",
-    eyebrow: "Stage 2 · Introduction",
+    eyebrow: "Step 2 · Introduction",
     title: "What is a servo motor?",
     instruction:
-      "A servo is a motor used for precise position control. It converts electrical energy into mechanical movement, but unlike a basic DC motor, it receives a signal that tells it how far to rotate. Watch the required introduction, then answer the question.",
+      "A servo is a small motor that can turn to a chosen position. In this project, Arduino will send the servo a signal that tells it what angle to move to.",
     video: true,
     question: {
       text: "What makes a servo different from a basic DC motor?",
@@ -51,19 +51,17 @@ const stages: Stage[] = [
         "It does not use electrical energy.",
       ],
       correct: 0,
-      correctFeedback:
-        "Correct! A positional servo receives a control signal that tells it which angle to move to.",
-      incorrectFeedback:
-        "Not quite. Rewatch the section explaining how the motor receives a signal, then try again.",
+      correctFeedback: "Correct. The signal tells the servo which angle to move to.",
+      incorrectFeedback: "Review the context above, then try again.",
     },
-    tip: "In this project, Pot1 provides the input. Arduino maps that value to an angle and tells the servo where to move.",
+    tip: "The practice question helps you check your understanding, but it does not block the next step.",
   },
   {
     short: "Connect",
-    eyebrow: "Stage 3 · Hardware",
+    eyebrow: "Step 3 · Hardware",
     title: "Connect only the servo",
     instruction:
-      "With the board disconnected, connect the servo to the three-pin connection controlled by digital pin 3. Match ground, power, and signal. Never force the connector.",
+      "The servo has three wires: ground, power, and signal. Connect it to the three-pin servo connector for pin 3 while the board is still disconnected.",
     checks: [
       "The board is disconnected from USB.",
       "The servo signal is connected to pin 3.",
@@ -74,10 +72,10 @@ const stages: Stage[] = [
   },
   {
     short: "Set Pot1",
-    eyebrow: "Stage 4 · Input",
+    eyebrow: "Step 4 · Input",
     title: "Set Pot1 to A1",
     instruction:
-      "The potentiometer is already built into the Freenove Projects Board. Set the selector so Pot1 uses analog input A1. Do not add breadboard wires.",
+      "Pot1 is the knob already built into the Freenove Projects Board. Set it to A1 so Arduino can read the knob position.",
     checks: [
       "Pot1 is selected.",
       "Switch 1, labeled Pot1 and A1, is moved to the ON side.",
@@ -88,10 +86,10 @@ const stages: Stage[] = [
   },
   {
     short: "Library",
-    eyebrow: "Stage 5 · Arduino IDE check",
+    eyebrow: "Step 5 · Arduino IDE check",
     title: "Check the Servo library",
     instruction:
-      "A library is a set of extra code that gives Arduino new commands. The Servo library gives Arduino the commands needed to control a servo motor. First select Arduino Uno as the board, then check for the Servo example before writing the first code piece; install the library only if it is missing.",
+      "A library is extra code that gives Arduino new commands. The Servo library gives Arduino the commands needed to control a servo motor. Select Arduino Uno first, then check if the Servo example is already available.",
     checks: [
       "Open Tools → Board and select Arduino AVR Boards → Arduino Uno.",
       "Open File → Examples and look for Servo.",
@@ -103,10 +101,10 @@ const stages: Stage[] = [
   },
   {
     short: "Include",
-    eyebrow: "Stage 6 · Code piece 1",
+    eyebrow: "Step 6 · Code piece 1",
     title: "Add the Servo library and object",
     instruction:
-      "Type this first piece at the very top of your empty Arduino sketch. Do not copy code from a later stage.",
+      "This first code piece loads the Servo library and creates a servo object named myServo. Type it at the top of your sketch.",
     code: `#include <Servo.h>\n\nServo myServo;`,
     question: {
       text: "What do these two lines add to the sketch?",
@@ -121,10 +119,10 @@ const stages: Stage[] = [
   },
   {
     short: "Pins",
-    eyebrow: "Stage 7 · Code piece 2",
+    eyebrow: "Step 7 · Code piece 2",
     title: "Name the two pins",
     instruction:
-      "Add these lines under the servo object. Using names makes the rest of the sketch easier to read.",
+      "These lines give simple names to the two pins. Pot1 uses A1 as the input. The servo uses pin 3 as the output.",
     code: `const int potPin = A1;\nconst int servoPin = 3;`,
     question: {
       text: "Which pin name represents the input and which represents the output?",
@@ -139,10 +137,10 @@ const stages: Stage[] = [
   },
   {
     short: "Setup",
-    eyebrow: "Stage 8 · Code piece 3",
+    eyebrow: "Step 8 · Code piece 3",
     title: "Attach the servo",
     instruction:
-      "Start the setup function and attach the servo to its named pin. setup() runs only once when the Arduino starts.",
+      "setup() runs one time when Arduino starts. In this step, you tell Arduino that myServo is connected to servoPin.",
     code: `void setup() {\n  myServo.attach(servoPin);`,
     question: {
       text: "Why does attach() use servoPin inside setup()?",
@@ -157,10 +155,10 @@ const stages: Stage[] = [
   },
   {
     short: "Start Serial",
-    eyebrow: "Stage 9 · Code piece 4",
+    eyebrow: "Step 9 · Code piece 4",
     title: "Start serial communication",
     instruction:
-      "Add this line beneath attach(), then close setup(). It creates a communication channel between the Arduino and the Serial Monitor.",
+      "Serial Monitor lets you see values from the board on the computer. 9600 is the communication speed you will use later.",
     code: `  Serial.begin(9600);\n}`,
     question: {
       text: "What does 9600 represent in Serial.begin(9600)?",
@@ -175,10 +173,10 @@ const stages: Stage[] = [
   },
   {
     short: "Read",
-    eyebrow: "Stage 10 · Code piece 5",
+    eyebrow: "Step 10 · Code piece 5",
     title: "Read Pot1",
     instruction:
-      "Start the loop and read the analog value from Pot1. The loop repeats while the Arduino is powered.",
+      "loop() repeats while the board is powered. This line reads the knob position from Pot1 and stores it in adcValue.",
     code: `void loop() {\n  int adcValue = analogRead(potPin);`,
     question: {
       text: "What range of values can adcValue store from analogRead(potPin)?",
@@ -193,10 +191,10 @@ const stages: Stage[] = [
   },
   {
     short: "Map",
-    eyebrow: "Stage 11 · Code piece 6",
+    eyebrow: "Step 11 · Code piece 6",
     title: "Convert the value into an angle",
     instruction:
-      "Add this line inside loop(). It changes the potentiometer range into a range the servo can use.",
+      "The knob reading goes from 0 to 1023. The servo angle goes from 0 to 180. map() changes the knob value into an angle.",
     code: `  int angle = map(adcValue, 0, 1023, 0, 180);`,
     question: {
       text: "What does map(adcValue, 0, 1023, 0, 180) do?",
@@ -211,10 +209,10 @@ const stages: Stage[] = [
   },
   {
     short: "Move",
-    eyebrow: "Stage 12 · Code piece 7",
+    eyebrow: "Step 12 · Code piece 7",
     title: "Move the servo",
     instruction:
-      "Use the calculated angle to move the servo. Keep loop() open because the next stages will add the Serial Monitor evidence.",
+      "Now the servo can move. This line sends the calculated angle to myServo.",
     code: `  myServo.write(angle);`,
     question: {
       text: "Why does myServo.write() use angle instead of adcValue?",
@@ -229,10 +227,10 @@ const stages: Stage[] = [
   },
   {
     short: "Print ADC",
-    eyebrow: "Stage 13 · Code piece 8",
+    eyebrow: "Step 13 · Code piece 8",
     title: "Print the raw input",
     instruction:
-      "Add these lines inside loop(). They label and print the original Pot1 reading.",
+      "Printing adcValue lets you see the original knob reading before it becomes a servo angle.",
     code: `  Serial.print("Potentiometer: ");\n  Serial.print(adcValue);`,
     question: {
       text: "Why is adcValue useful evidence in the Serial Monitor?",
@@ -247,10 +245,10 @@ const stages: Stage[] = [
   },
   {
     short: "Print Angle",
-    eyebrow: "Stage 14 · Code piece 9",
+    eyebrow: "Step 14 · Code piece 9",
     title: "Print the mapped angle",
     instruction:
-      "Add the angle label and value, pause briefly, and close loop(). println() moves the next reading to a new line.",
+      "Printing angle lets you compare the knob reading with the angle sent to the servo. A short delay makes the Serial Monitor easier to read.",
     code: `  Serial.print(" | Servo angle: ");\n  Serial.println(angle);\n  delay(100);\n}`,
     question: {
       text: "What is the purpose of Serial.println(angle) and delay(100)?",
@@ -265,10 +263,10 @@ const stages: Stage[] = [
   },
   {
     short: "Complete Code",
-    eyebrow: "Stage 15 · Assemble your work",
+    eyebrow: "Step 15 · Assemble your work",
     title: "Show your complete sketch",
     instruction:
-      "You have now built all nine code pieces in Arduino IDE. Review the complete program you assembled, then paste it below exactly as it appears in your sketch. This is the first and only stage that asks for the complete code.",
+      "You have now built the sketch one piece at a time. Paste the complete program here so you can review it before uploading.",
     checks: [
       "The Servo library, Servo object, and both pin names are present.",
       "setup() attaches the servo and starts serial communication.",
@@ -280,10 +278,10 @@ const stages: Stage[] = [
   },
   {
     short: "Upload",
-    eyebrow: "Stage 16 · Arduino IDE",
+    eyebrow: "Step 16 · Arduino IDE",
     title: "Verify and upload",
     instruction:
-      "Now connect the USB cable. Select the correct board and port, verify the sketch, and upload it. Read any error before changing your code.",
+      "Now connect the USB cable. Select the correct board and port, then verify and upload the sketch.",
     checks: [
       "The correct board is selected.",
       "The correct port is selected.",
@@ -294,10 +292,10 @@ const stages: Stage[] = [
   },
   {
     short: "Monitor",
-    eyebrow: "Stage 17 · Make the mapping visible",
+    eyebrow: "Step 17 · Make the mapping visible",
     title: "Open and read the Serial Monitor",
     instruction:
-      "Open Tools → Serial Monitor after the upload. Set it to 9600 baud, turn Pot1 slowly, and watch how each raw reading maps to an angle.",
+      "Open Serial Monitor after the upload. Turn Pot1 slowly and watch how the knob value changes with the servo angle.",
     checks: [
       "The Serial Monitor is open.",
       "The baud rate is set to 9600.",
@@ -317,10 +315,10 @@ const stages: Stage[] = [
   },
   {
     short: "Test",
-    eyebrow: "Stage 18 · Evidence",
+    eyebrow: "Step 18 · Evidence",
     title: "Complete three controlled tests",
     instruction:
-      "Use the Serial Monitor and test low, middle, and high Pot1 positions. Record real values—do not invent them.",
+      "Test the system in three positions: low, middle, and high. Use real values from the Serial Monitor.",
     checks: [
       "Low position: record ADC value, calculated angle, and observed position.",
       "Middle position: record ADC value, calculated angle, and observed position.",
@@ -339,10 +337,10 @@ const stages: Stage[] = [
   },
   {
     short: "Explain",
-    eyebrow: "Stage 19 · English explanation",
+    eyebrow: "Step 19 · English explanation",
     title: "Prepare your explanation",
     instruction:
-      "Explain the complete input–process–output relationship in your own words. Do not simply read the code.",
+      "Prepare a short explanation in your own words. Focus on what enters the system, what Arduino does, and what moves at the end.",
     checks: [
       "Identify Pot1 on A1 as the input.",
       "Explain that analogRead produces a value from 0 to 1023.",
@@ -362,10 +360,10 @@ const stages: Stage[] = [
   },
   {
     short: "Submit",
-    eyebrow: "Stage 20 · Final check",
+    eyebrow: "Step 20 · Final check",
     title: "Save, demonstrate, and submit",
     instruction:
-      "You are at the final stage. Review the required evidence before asking the teacher to evaluate your work.",
+      "Before asking for evaluation, make sure your code, test evidence, demonstration, and workspace are ready.",
     checks: [
       "Full name, group, and date are complete.",
       "The final Arduino sketch is saved with the assigned filename.",
@@ -448,7 +446,6 @@ export default function App() {
   const finalCodeStage = stage.short === "Complete Code";
   const finalSketchComplete = !finalCodeStage || Boolean(finalSketch.trim());
   const canConfirm =
-    quizCorrect &&
     studentInfoComplete &&
     finalSketchComplete;
   const progress = useMemo(
@@ -503,7 +500,7 @@ export default function App() {
             <h1>Build your servo system<br />one stage at a time.</h1>
             <p>
               You will see only the instruction you need now. Complete it,
-              explain your work, and then unlock the next stage.
+              follow one clear step, try the practice, and continue when your work is ready.
             </p>
             <div className="welcome-rules">
               <span><b>20</b> focused stages</span>
@@ -561,10 +558,13 @@ export default function App() {
 
       <section className="stage-page">
         <article className="focus-card">
-          <div className="stage-count">Stage {current + 1} of {stages.length}</div>
+          <div className="stage-count">Step {current + 1} of {stages.length}</div>
           <p className="step-eyebrow">{stage.eyebrow}</p>
           <h1>{stage.title}</h1>
-          <p className="instruction">{stage.instruction}</p>
+          <section className="context-box" aria-label="Step context">
+            <span>Step context</span>
+            <p>{stage.instruction}</p>
+          </section>
 
           {current === 0 && (
             <div className="student-info" aria-label="Student information">
@@ -618,35 +618,6 @@ export default function App() {
             </div>
           )}
 
-          {stage.question && (
-            <fieldset className="quiz-box">
-              <legend>{stage.question.text}</legend>
-              <div className="quiz-options">
-                {stage.question.options.map((option, index) => (
-                  <button
-                    aria-pressed={quizAnswers[current] === index}
-                    className={quizAnswers[current] === index ? "selected" : ""}
-                    key={option}
-                    onClick={() =>
-                      setQuizAnswers((answers) => ({ ...answers, [current]: index }))
-                    }
-                    type="button"
-                  >
-                    <span>{String.fromCharCode(65 + index)}</span>
-                    {option}
-                  </button>
-                ))}
-              </div>
-              {quizAnswers[current] !== undefined && (
-                <p className={quizCorrect ? "quiz-correct" : "quiz-incorrect"} role="status">
-                  {quizCorrect
-                    ? stage.question.correctFeedback || "Correct. Continue when the stage evidence is complete."
-                    : stage.question.incorrectFeedback || "Not quite. Review the instruction and try again."}
-                </p>
-              )}
-            </fieldset>
-          )}
-
           {stage.image && (
             <div className="connection-visual">
               <Image
@@ -678,7 +649,7 @@ export default function App() {
                 <button onClick={copyPiece} type="button">{copied ? "✓ Copied" : "Copy this piece"}</button>
               </div>
               <pre><code>{stage.code}</code></pre>
-              <p>Type this below the code from the previous stage in Arduino IDE. Do not replace your sketch.</p>
+              <p>Type this below the code from the previous step in Arduino IDE. Do not replace your sketch.</p>
             </div>
           )}
 
@@ -697,10 +668,43 @@ export default function App() {
 
           {stage.checks && (
             <div className="task-list">
+              <h2>Do this</h2>
               {stage.checks.map((check, index) => (
                 <div key={check}><span>{index + 1}</span><p>{check}</p></div>
               ))}
             </div>
+          )}
+
+          {stage.question && (
+            <fieldset className="quiz-box">
+              <legend>
+                <span className="practice-label">Practice</span>
+                {stage.question.text}
+              </legend>
+              <div className="quiz-options">
+                {stage.question.options.map((option, index) => (
+                  <button
+                    aria-pressed={quizAnswers[current] === index}
+                    className={quizAnswers[current] === index ? "selected" : ""}
+                    key={option}
+                    onClick={() =>
+                      setQuizAnswers((answers) => ({ ...answers, [current]: index }))
+                    }
+                    type="button"
+                  >
+                    <span>{String.fromCharCode(65 + index)}</span>
+                    {option}
+                  </button>
+                ))}
+              </div>
+              {quizAnswers[current] !== undefined && (
+                <p className={quizCorrect ? "quiz-correct" : "quiz-incorrect"} role="status">
+                  {quizCorrect
+                    ? stage.question.correctFeedback || "Correct. This matches the step context."
+                    : stage.question.incorrectFeedback || "Review the step context above, then try again."}
+                </p>
+              )}
+            </fieldset>
           )}
 
           {stage.tip && <div className="tip-box"><b>Remember</b><p>{stage.tip}</p></div>}
@@ -716,7 +720,7 @@ export default function App() {
               <b>I completed this stage.</b>
               <small>
                 {!quizCorrect
-                  ? "Answer the question correctly to unlock this confirmation."
+                  ? "Practice is optional. Review the context if your answer was not correct."
                   : !studentInfoComplete
                     ? "Enter your full name, group, and date to unlock this confirmation."
                     : !finalSketchComplete
