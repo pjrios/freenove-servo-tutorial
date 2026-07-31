@@ -507,6 +507,13 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  function goToCompletedStage(index: number) {
+    if (!confirmed[index] || index === current) return;
+    setPracticeOpen(false);
+    setCurrent(index);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   if (showReport) {
     return (
       <main className="app-shell report-shell">
@@ -653,18 +660,28 @@ export default function App() {
 
       <div className="stage-strip" aria-label="Tutorial progress">
         {stages.map((item, index) => (
-          <div
+          <button
+            aria-current={index === current ? "step" : undefined}
             className={[
               index === current ? "current" : "",
               confirmed[index] ? "complete" : "",
-              index > current ? "future" : "",
+              index > current && !confirmed[index] ? "future" : "",
             ].join(" ")}
+            disabled={!confirmed[index] || index === current}
             key={item.short}
-            title={index <= current ? item.short : "Not reached yet"}
+            onClick={() => goToCompletedStage(index)}
+            title={
+              index === current
+                ? "Current step"
+                : confirmed[index]
+                  ? `Go to step ${index + 1}: ${item.short}`
+                  : "Not completed yet"
+            }
+            type="button"
           >
             <span>{confirmed[index] ? "✓" : index + 1}</span>
             <b>{index === current ? item.short : ""}</b>
-          </div>
+          </button>
         ))}
       </div>
 
