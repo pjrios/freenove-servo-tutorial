@@ -176,7 +176,7 @@ const stages: Stage[] = [
     eyebrow: "Step 10 · Code piece 5",
     title: "Read Pot1",
     instruction:
-      "loop() repeats while the board is powered. This line reads the knob position from Pot1 and stores it in adcValue.",
+      "loop() repeats while the board is powered. This line reads the knob position from Pot1 and stores a number from 0 to 1023 in adcValue.",
     code: `void loop() {\n  int adcValue = analogRead(potPin);`,
     question: {
       text: "What range of values can adcValue store from analogRead(potPin)?",
@@ -212,7 +212,7 @@ const stages: Stage[] = [
     eyebrow: "Step 12 · Code piece 7",
     title: "Move the servo",
     instruction:
-      "Now the servo can move. This line sends the calculated angle to myServo.",
+      "Now the servo can move. This line sends the calculated angle from 0 to 180 to myServo instead of sending the original Pot1 value from 0 to 1023.",
     code: `  myServo.write(angle);`,
     question: {
       text: "Why does myServo.write() use angle instead of adcValue?",
@@ -295,7 +295,7 @@ const stages: Stage[] = [
     eyebrow: "Step 17 · Make the mapping visible",
     title: "Open and read the Serial Monitor",
     instruction:
-      "Open Serial Monitor after the upload. Turn Pot1 slowly and watch how the knob value changes with the servo angle.",
+      "Open Serial Monitor after the upload. Turn Pot1 slowly and watch how the knob value changes with the servo angle. A middle knob value near 512 should produce an angle near 90 degrees.",
     checks: [
       "The Serial Monitor is open.",
       "The baud rate is set to 9600.",
@@ -365,7 +365,7 @@ const stages: Stage[] = [
     instruction:
       "Before asking for evaluation, make sure your code, test evidence, demonstration, and workspace are ready.",
     checks: [
-      "Full name, group, and date are complete.",
+      "Group members, group, and date are complete.",
       "The final Arduino sketch is saved with the assigned filename.",
       "All three test results and the observation are complete.",
       "The live demonstration and English explanation are ready.",
@@ -385,7 +385,7 @@ export default function App() {
   const [copied, setCopied] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
   const [studentInfo, setStudentInfo] = useState({
-    fullName: "",
+    members: "",
     group: "",
     date: "",
   });
@@ -409,7 +409,7 @@ export default function App() {
       }
       if (data.studentInfo && typeof data.studentInfo === "object") {
         setStudentInfo({
-          fullName: String(data.studentInfo.fullName || ""),
+          members: String(data.studentInfo.members || data.studentInfo.fullName || ""),
           group: String(data.studentInfo.group || ""),
           date: String(data.studentInfo.date || ""),
         });
@@ -440,7 +440,7 @@ export default function App() {
   const studentInfoComplete =
     current !== 0 ||
     Boolean(
-      studentInfo.fullName.trim() &&
+      studentInfo.members.trim() &&
       studentInfo.group.trim() &&
       studentInfo.date,
     );
@@ -519,7 +519,7 @@ export default function App() {
               <p>Academia Internacional David · Technology & Robotics</p>
               <h1>Freenove Servo Tutorial Report</h1>
               <dl>
-                <div><dt>Name</dt><dd>{studentInfo.fullName || "Not entered"}</dd></div>
+                <div><dt>Members</dt><dd>{studentInfo.members || "Not entered"}</dd></div>
                 <div><dt>Group</dt><dd>{studentInfo.group || "Not entered"}</dd></div>
                 <div><dt>Date</dt><dd>{studentInfo.date || "Not entered"}</dd></div>
                 <div><dt>Progress</dt><dd>{progress}% complete</dd></div>
@@ -648,17 +648,16 @@ export default function App() {
           </section>
 
           {current === 0 && (
-            <div className="student-info" aria-label="Student information">
+            <div className="student-info" aria-label="Group information">
               <label>
-                <span>Full name</span>
+                <span>Members</span>
                 <input
-                  autoComplete="name"
                   onChange={(event) =>
-                    setStudentInfo((info) => ({ ...info, fullName: event.target.value }))
+                    setStudentInfo((info) => ({ ...info, members: event.target.value }))
                   }
-                  placeholder="Enter your full name"
+                  placeholder="Enter all group members"
                   type="text"
-                  value={studentInfo.fullName}
+                  value={studentInfo.members}
                 />
               </label>
               <label>
@@ -803,7 +802,7 @@ export default function App() {
                 {!quizCorrect
                   ? "Practice is optional. Review the context if your answer was not correct."
                   : !studentInfoComplete
-                    ? "Enter your full name, group, and date to unlock this confirmation."
+                    ? "Enter the group members, group, and date to unlock this confirmation."
                     : !finalSketchComplete
                       ? "Paste your complete assembled Arduino sketch to unlock this confirmation."
                       : "I can show or explain the required work."}
