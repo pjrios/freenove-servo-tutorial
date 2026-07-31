@@ -356,6 +356,15 @@ const stages: Stage[] = [
   },
 ];
 
+function shuffledIndices(length: number) {
+  const indices = Array.from({ length }, (_, index) => index);
+  for (let index = indices.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [indices[index], indices[randomIndex]] = [indices[randomIndex], indices[index]];
+  }
+  return indices;
+}
+
 export default function App() {
   const [started, setStarted] = useState(false);
   const [showReport, setShowReport] = useState(false);
@@ -366,6 +375,11 @@ export default function App() {
   const [copied, setCopied] = useState(false);
   const [practiceOpen, setPracticeOpen] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
+  const [optionOrders] = useState(() =>
+    stages.map((item) =>
+      item.question ? shuffledIndices(item.question.options.length) : [],
+    ),
+  );
   const [studentInfo, setStudentInfo] = useState({
     members: "",
     group: "",
@@ -825,18 +839,18 @@ export default function App() {
             <span className="practice-label">Optional practice</span>
             <h2 id="practice-question-title">{stage.question.text}</h2>
             <div className="quiz-options">
-              {stage.question.options.map((option, index) => (
+              {optionOrders[current].map((optionIndex, displayIndex) => (
                 <button
-                  aria-pressed={quizAnswers[current] === index}
-                  className={quizAnswers[current] === index ? "selected" : ""}
-                  key={option}
+                  aria-pressed={quizAnswers[current] === optionIndex}
+                  className={quizAnswers[current] === optionIndex ? "selected" : ""}
+                  key={stage.question!.options[optionIndex]}
                   onClick={() =>
-                    setQuizAnswers((answers) => ({ ...answers, [current]: index }))
+                    setQuizAnswers((answers) => ({ ...answers, [current]: optionIndex }))
                   }
                   type="button"
                 >
-                  <span>{String.fromCharCode(65 + index)}</span>
-                  {option}
+                  <span>{String.fromCharCode(65 + displayIndex)}</span>
+                  {stage.question!.options[optionIndex]}
                 </button>
               ))}
             </div>
