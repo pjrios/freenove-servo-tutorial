@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { downloadTutorialPdf } from "./reportPdf";
 function Image({ priority: _priority, ...props }: any) { return <img {...props} />; }
 
 type Stage = {
@@ -375,6 +376,7 @@ export default function App() {
   );
   const [copied, setCopied] = useState(false);
   const [practiceOpen, setPracticeOpen] = useState(false);
+  const [pdfDownloading, setPdfDownloading] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
   const [optionOrders] = useState(() =>
     stages.map((item) =>
@@ -491,6 +493,27 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  async function downloadReportPdf() {
+    setPdfDownloading(true);
+    try {
+      await downloadTutorialPdf({
+        confirmed,
+        date: studentInfo.date,
+        finalSketch,
+        group: studentInfo.group,
+        members: studentInfo.members,
+        progress,
+        quizAnswers,
+        stages,
+      });
+    } catch (error) {
+      console.error(error);
+      window.alert("The PDF could not be created. Please try again.");
+    } finally {
+      setPdfDownloading(false);
+    }
+  }
+
   function next() {
     if (!confirmed[current]) return;
     setPracticeOpen(false);
@@ -523,15 +546,25 @@ export default function App() {
             <span className="brand-mark">AID</span>
             <span><b>Servo Tutorial Report</b><small>Summative #4</small></span>
           </div>
-          <button className="back-button" onClick={() => setShowReport(false)} type="button">
-            Back to tutorial
+          <button
+            className="report-toolbar-button report-back-button"
+            onClick={() => setShowReport(false)}
+            type="button"
+          >
+            <span aria-hidden="true">←</span> Back to tutorial
           </button>
         </header>
 
         <section className="report-page">
           <div className="report-actions">
-            <button className="next-button" onClick={() => window.print()} type="button">
-              Print full report
+            <button
+              className="report-toolbar-button report-download-button"
+              disabled={pdfDownloading}
+              onClick={downloadReportPdf}
+              type="button"
+            >
+              <span aria-hidden="true">↓</span>
+              {pdfDownloading ? "Creating PDF..." : "Download PDF"}
             </button>
           </div>
 

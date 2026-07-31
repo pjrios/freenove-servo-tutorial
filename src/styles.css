@@ -425,6 +425,32 @@ button { cursor: pointer; }
   justify-content: flex-end;
   margin-bottom: 16px;
 }
+.report-toolbar-button {
+  align-items: center;
+  border-radius: 8px;
+  display: inline-flex;
+  font-weight: 900;
+  gap: 9px;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 16px;
+}
+.report-toolbar-button span { font-size: 20px; line-height: 1; }
+.report-back-button {
+  background: transparent;
+  border: 1px solid #58738d;
+  color: white;
+}
+.report-back-button:hover { background: #0a3157; border-color: #7edcf1; }
+.report-download-button {
+  background: var(--navy-800);
+  border: 1px solid var(--navy-800);
+  color: white;
+  min-width: 160px;
+}
+.report-download-button:hover { background: #0d4777; }
+.report-download-button:disabled { cursor: wait; opacity: .65; }
+.report-toolbar-button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
 .report-document {
   background: white;
   border: 1px solid var(--line);
