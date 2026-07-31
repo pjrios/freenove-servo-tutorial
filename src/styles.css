@@ -251,8 +251,20 @@ button { cursor: pointer; }
   align-items: center; display: flex; flex-direction: column; justify-content: center; margin: 28px 0; padding: 22px;
 }
 .connection-visual img { max-width: 100%; object-fit: contain; }
-.connection-visual .servo-connection-image { height: auto; width: min(750px, 100%); }
 .connection-visual .selector-image { height: 300px; width: 100%; }
+.connection-reference-list { display: grid; gap: 28px; width: 100%; }
+.connection-reference-list figure { margin: 0; text-align: center; }
+.connection-reference-list figure + figure {
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+.connection-reference-list img { height: auto; width: min(750px, 100%); }
+.connection-reference-list figcaption {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 800;
+  margin-top: 12px;
+}
 .manual-caption {
   color: var(--muted); font-size: 14px; line-height: 1.5; margin: 14px 0 0; text-align: center;
 }

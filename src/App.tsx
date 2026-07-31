@@ -732,25 +732,40 @@ export default function App() {
 
           {stage.image && (
             <div className="connection-visual">
-              <Image
-                alt={
-                  stage.image === "selector"
-                    ? "Freenove manual selector diagram showing switch 1 for Pot1 and A1 moved to ON"
-                    : "Servo connector labeled GND, VCC, and SIGNAL"
-                }
-                className={stage.image === "selector" ? "selector-image" : "servo-connection-image"}
-                height={stage.image === "selector" ? 330 : 422}
-                src={
-                  stage.image === "selector"
-                    ? "assets/pot1-a1-selector-manual.svg"
-                    : "assets/servo-connections.png"
-                }
-                width={stage.image === "selector" ? 360 : 750}
-              />
-              {stage.image === "selector" && (
-                <p className="manual-caption">
-                  From the Freenove manual: move selector <b>1</b> (Pot1 / A1) toward <b>ON</b>.
-                </p>
+              {stage.image === "selector" ? (
+                <>
+                  <Image
+                    alt="Freenove manual selector diagram showing switch 1 for Pot1 and A1 moved to ON"
+                    className="selector-image"
+                    height={330}
+                    src="assets/pot1-a1-selector-manual.svg"
+                    width={360}
+                  />
+                  <p className="manual-caption">
+                    From the Freenove manual: move selector <b>1</b> (Pot1 / A1) toward <b>ON</b>.
+                  </p>
+                </>
+              ) : (
+                <div className="connection-reference-list">
+                  <figure>
+                    <Image
+                      alt="Servo connector labeled GND, VCC, and SIGNAL"
+                      height={422}
+                      src="assets/servo-connections.png"
+                      width={750}
+                    />
+                    <figcaption>1. Identify GND, VCC, and SIGNAL on the servo connector.</figcaption>
+                  </figure>
+                  <figure>
+                    <Image
+                      alt="Servo connected to the pin 3 header on a Freenove Projects Board"
+                      height={526}
+                      src="assets/freenove-servo-connection.png"
+                      width={702}
+                    />
+                    <figcaption>2. Connect the servo to the pin 3 header as shown.</figcaption>
+                  </figure>
+                </div>
               )}
             </div>
           )}
