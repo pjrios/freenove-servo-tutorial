@@ -7,12 +7,9 @@ type Stage = {
   short: string;
   eyebrow: string;
   title: string;
-  learningGoal?: string;
   instruction: string;
   checks?: string[];
   code?: string;
-  tip?: string;
-  tipLabel?: string;
   image?: "connection" | "selector";
   video?: boolean;
   question?: {
@@ -41,20 +38,19 @@ const stages: Stage[] = [
     short: "Meet Servo",
     eyebrow: "Step 2 · Introduction",
     title: "What is a servo motor?",
-    learningGoal: "Explain that a servo moves to a position chosen by Arduino.",
     instruction:
       "A servo is a small motor that can turn to a chosen position. In this project, Arduino will send the servo a signal that tells it what angle to move to.",
     video: true,
     question: {
-      text: "What makes a servo different from a basic DC motor?",
+      text: "What does Arduino tell the servo to do?",
       options: [
-        "It receives a signal telling it to move to a specific angle.",
-        "It can only rotate continuously.",
-        "It does not use electrical energy.",
+        "Move to a specific angle.",
+        "Read the value from Pot1.",
+        "Open the Serial Monitor.",
       ],
       correct: 0,
-      correctFeedback: "Correct. The signal tells the servo which angle to move to.",
-      incorrectFeedback: "Review the context above, then try again.",
+      correctFeedback: "Correct. Arduino sends a signal that tells the servo which angle to move to.",
+      incorrectFeedback: "Not yet. Close this practice, read the explanation, and try again.",
     },
   },
   {
@@ -62,21 +58,18 @@ const stages: Stage[] = [
     eyebrow: "Step 3 · Hardware",
     title: "Connect only the servo",
     instruction:
-      "The servo has three wires: ground, power, and signal. Connect it to the three-pin servo connector for pin 3 while the board is still disconnected.",
+      "The servo has three wires: ground, power, and signal. Connect it to the three-pin connector for pin 3 while the board is disconnected. If the connector does not slide in easily, stop and ask for help.",
     checks: [
       "The board is disconnected from USB.",
       "The servo signal is connected to pin 3.",
       "The connector orientation is correct and secure.",
     ],
-    tip: "If it does not slide in easily, stop and ask for help.",
-    tipLabel: "Safety",
     image: "connection",
   },
   {
     short: "Set Pot1",
     eyebrow: "Step 4 · Input",
     title: "Set Pot1 to A1",
-    learningGoal: "Explain that Pot1 is the knob Arduino will read as the input.",
     instruction:
       "Pot1 is the knob already built into the Freenove Projects Board. Set it to A1 so Arduino can read the knob position.",
     checks: [
@@ -90,7 +83,6 @@ const stages: Stage[] = [
     short: "Library",
     eyebrow: "Step 5 · Arduino IDE check",
     title: "Check the Servo library",
-    learningGoal: "Explain what a library does and find the Servo library in Arduino IDE.",
     instruction:
       "A library is extra code that gives Arduino new commands. The Servo library gives Arduino the commands needed to control a servo motor. Select Arduino Uno first, then check if the Servo example is already available.",
     checks: [
@@ -105,7 +97,6 @@ const stages: Stage[] = [
     short: "Include",
     eyebrow: "Step 6 · Code piece 1",
     title: "Add the Servo library and object",
-    learningGoal: "Recognize the two lines that prepare the sketch to control a servo.",
     instruction:
       "This first code piece loads the Servo library and creates a servo object named myServo. Type it at the top of your sketch.",
     code: `#include <Servo.h>\n\nServo myServo;`,
@@ -123,7 +114,6 @@ const stages: Stage[] = [
     short: "Pins",
     eyebrow: "Step 7 · Code piece 2",
     title: "Name the two pins",
-    learningGoal: "Identify A1 as the knob input and pin 3 as the servo output.",
     instruction:
       "These lines give simple names to the two pins. Pot1 uses A1 as the input. The servo uses pin 3 as the output.",
     code: `const int potPin = A1;\nconst int servoPin = 3;`,
@@ -141,7 +131,6 @@ const stages: Stage[] = [
     short: "Setup",
     eyebrow: "Step 8 · Code piece 3",
     title: "Attach the servo",
-    learningGoal: "Explain how the sketch tells Arduino which pin controls the servo.",
     instruction:
       "setup() runs one time when Arduino starts. In this step, you tell Arduino that myServo is connected to servoPin.",
     code: `void setup() {\n  myServo.attach(servoPin);`,
@@ -159,7 +148,6 @@ const stages: Stage[] = [
     short: "Start Serial",
     eyebrow: "Step 9 · Code piece 4",
     title: "Start serial communication",
-    learningGoal: "Explain how Arduino sends values to the Serial Monitor.",
     instruction:
       "Serial Monitor lets you see values from the board on the computer. 9600 is the communication speed you will use later.",
     code: `  Serial.begin(9600);\n}`,
@@ -177,7 +165,6 @@ const stages: Stage[] = [
     short: "Read",
     eyebrow: "Step 10 · Code piece 5",
     title: "Read Pot1",
-    learningGoal: "Explain how Arduino reads the knob as a number from 0 to 1023.",
     instruction:
       "loop() repeats while the board is powered. This line reads the knob position from Pot1 and stores a number from 0 to 1023 in adcValue.",
     code: `void loop() {\n  int adcValue = analogRead(potPin);`,
@@ -195,9 +182,8 @@ const stages: Stage[] = [
     short: "Map",
     eyebrow: "Step 11 · Code piece 6",
     title: "Convert the value into an angle",
-    learningGoal: "Explain how the knob number becomes a servo angle.",
     instruction:
-      "The knob reading goes from 0 to 1023. The servo angle goes from 0 to 180. map() changes the knob value into an angle.",
+      "The knob reading goes from 0 to 1023. The servo angle goes from 0 to 180. map() changes the knob value into an angle; it does not move the servo yet.",
     code: `  int angle = map(adcValue, 0, 1023, 0, 180);`,
     question: {
       text: "What does map(adcValue, 0, 1023, 0, 180) do?",
@@ -208,14 +194,11 @@ const stages: Stage[] = [
       ],
       correct: 0,
     },
-    tip: "map() converts the input scale; it does not move the servo by itself.",
-    tipLabel: "Code note",
   },
   {
     short: "Move",
     eyebrow: "Step 12 · Code piece 7",
     title: "Move the servo",
-    learningGoal: "Explain how the sketch sends the chosen angle to the servo.",
     instruction:
       "Now the servo can move. This line sends the calculated angle from 0 to 180 to myServo instead of sending the original Pot1 value from 0 to 1023.",
     code: `  myServo.write(angle);`,
@@ -233,7 +216,6 @@ const stages: Stage[] = [
     short: "Print ADC",
     eyebrow: "Step 13 · Code piece 8",
     title: "Print the raw input",
-    learningGoal: "Recognize the original knob number in the Serial Monitor.",
     instruction:
       "Printing adcValue lets you see the original knob reading before it becomes a servo angle.",
     code: `  Serial.print("Potentiometer: ");\n  Serial.print(adcValue);`,
@@ -251,9 +233,8 @@ const stages: Stage[] = [
     short: "Print Angle",
     eyebrow: "Step 14 · Code piece 9",
     title: "Print the mapped angle",
-    learningGoal: "Compare the knob number with the servo angle shown on screen.",
     instruction:
-      "Printing angle lets you compare the knob reading with the angle sent to the servo. A short delay makes the Serial Monitor easier to read.",
+      "Printing angle lets you compare the knob reading with the angle sent to the servo. A short delay makes the Serial Monitor easier to read. One line may show Potentiometer: 512 | Servo angle: 90.",
     code: `  Serial.print(" | Servo angle: ");\n  Serial.println(angle);\n  delay(100);\n}`,
     question: {
       text: "What is the purpose of Serial.println(angle) and delay(100)?",
@@ -264,15 +245,13 @@ const stages: Stage[] = [
       ],
       correct: 0,
     },
-    tip: "Each line will now show one input–output pair, such as Potentiometer: 512 | Servo angle: 90.",
-    tipLabel: "Example",
   },
   {
     short: "Complete Code",
     eyebrow: "Step 15 · Assemble your work",
     title: "Show your complete sketch",
     instruction:
-      "You have now built the sketch one piece at a time. Paste the complete program here so you can review it before uploading.",
+      "Paste the complete program you built from the nine code pieces. Check your own work before uploading it.",
     checks: [
       "The Servo library, Servo object, and both pin names are present.",
       "setup() attaches the servo and starts serial communication.",
@@ -280,29 +259,24 @@ const stages: Stage[] = [
       "The ADC value and mapped angle are printed to the Serial Monitor.",
       "All parentheses, semicolons, and closing braces are present.",
     ],
-    tip: "Do not replace your work with code from another source. This field should show the program you built one piece at a time.",
-    tipLabel: "Your work",
   },
   {
     short: "Upload",
     eyebrow: "Step 16 · Arduino IDE",
     title: "Verify and upload",
     instruction:
-      "Now connect the USB cable. Select the correct board and port, then verify and upload the sketch.",
+      "Connect the USB cable. Select the correct board and port, then verify and upload the sketch. If verification fails, compare your sketch with the code pieces one step at a time.",
     checks: [
       "The correct board is selected.",
       "The correct port is selected.",
       "The sketch verifies without errors.",
       "The sketch uploads successfully.",
     ],
-    tip: "If verification fails, compare your sketch with each code piece one step at a time.",
-    tipLabel: "If there is an error",
   },
   {
     short: "Monitor",
     eyebrow: "Step 17 · Make the mapping visible",
     title: "Open and read the Serial Monitor",
-    learningGoal: "Use the Serial Monitor to see how the knob controls the servo angle.",
     instruction:
       "Open Serial Monitor after the upload. Turn Pot1 slowly and watch how the knob value changes with the servo angle. A middle knob value near 512 should produce an angle near 90 degrees.",
     checks: [
@@ -320,15 +294,13 @@ const stages: Stage[] = [
       ],
       correct: 0,
     },
-    tip: "Approximately: 0 → 0°, 256 → 45°, 512 → 90°, 768 → 135°, and 1023 → 180°.",
-    tipLabel: "Useful values",
   },
   {
     short: "Test",
     eyebrow: "Step 18 · Evidence",
     title: "Complete three controlled tests",
     instruction:
-      "Test the system in three positions: low, middle, and high. Use real values from the Serial Monitor.",
+      "Test the system in three positions: low, middle, and high. Use real values from the Serial Monitor. As Pot1 increases, the ADC value and servo angle should also increase.",
     checks: [
       "Low position: record ADC value, calculated angle, and observed position.",
       "Middle position: record ADC value, calculated angle, and observed position.",
@@ -349,7 +321,6 @@ const stages: Stage[] = [
     short: "Explain",
     eyebrow: "Step 19 · English explanation",
     title: "Prepare your explanation",
-    learningGoal: "Explain the project as an input, a change made by Arduino, and an output.",
     instruction:
       "Prepare a short explanation in your own words. Focus on what enters the system, what Arduino does, and what moves at the end.",
     checks: [
@@ -393,6 +364,7 @@ export default function App() {
     () => stages.map(() => false),
   );
   const [copied, setCopied] = useState(false);
+  const [practiceOpen, setPracticeOpen] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
   const [studentInfo, setStudentInfo] = useState({
     members: "",
@@ -444,6 +416,20 @@ export default function App() {
     );
   }, [started, current, confirmed, quizAnswers, studentInfo, finalSketch]);
 
+  useEffect(() => {
+    if (!practiceOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setPracticeOpen(false);
+    };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [practiceOpen]);
+
   const stage = stages[current];
   const quizCorrect =
     !stage.question || quizAnswers[current] === stage.question.correct;
@@ -485,17 +471,20 @@ export default function App() {
   }
 
   function openReport() {
+    setPracticeOpen(false);
     setShowReport(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function next() {
     if (!confirmed[current]) return;
+    setPracticeOpen(false);
     setCurrent((value) => Math.min(value + 1, stages.length - 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function back() {
+    setPracticeOpen(false);
     if (current === 0) {
       setStarted(false);
     } else {
@@ -547,9 +536,6 @@ export default function App() {
                       </span>
                       <b>Step {index + 1}: {item.title}</b>
                     </div>
-                    {item.learningGoal && (
-                      <p><b>Learning goal:</b> {item.learningGoal}</p>
-                    )}
                     <p><b>Context:</b> {item.instruction}</p>
                     {item.checks && (
                       <ul>
@@ -652,17 +638,12 @@ export default function App() {
 
       <section className="stage-page">
         <article className="focus-card">
-          <div className="stage-count">Step {current + 1} of {stages.length}</div>
-          <p className="step-eyebrow">{stage.eyebrow}</p>
+          <div className="stage-count">
+            Step {current + 1} of {stages.length} · {stage.eyebrow.split(" · ")[1]}
+          </div>
           <h1>{stage.title}</h1>
-          {stage.learningGoal && (
-            <section className="learning-goal" aria-label="Learning goal">
-              <span>What you will learn</span>
-              <p>{stage.learningGoal}</p>
-            </section>
-          )}
-          <section className="context-box" aria-label="Step context">
-            <span>Step context</span>
+          <section className="context-box" aria-label="Step explanation">
+            <span>{stage.code || stage.question || stage.video ? "Understand this" : "Your task"}</span>
             <p>{stage.instruction}</p>
           </section>
 
@@ -744,8 +725,8 @@ export default function App() {
           {stage.code && (
             <div className="code-piece">
               <div className="code-piece-head">
-                <span>Code piece {stages.slice(0, current + 1).filter((item) => item.code).length} of 9</span>
-                <button onClick={copyPiece} type="button">{copied ? "✓ Copied" : "Copy this piece"}</button>
+                <span>Copy this code · Piece {stages.slice(0, current + 1).filter((item) => item.code).length} of 9</span>
+                <button onClick={copyPiece} type="button">{copied ? "✓ Copied" : "Copy"}</button>
               </div>
               <pre><code>{stage.code}</code></pre>
               <p>Type this below the code from the previous step in Arduino IDE. Do not replace your sketch.</p>
@@ -775,41 +756,11 @@ export default function App() {
           )}
 
           {stage.question && (
-            <fieldset className="quiz-box">
-              <legend>
-                <span className="practice-label">Practice</span>
-                {stage.question.text}
-              </legend>
-              <div className="quiz-options">
-                {stage.question.options.map((option, index) => (
-                  <button
-                    aria-pressed={quizAnswers[current] === index}
-                    className={quizAnswers[current] === index ? "selected" : ""}
-                    key={option}
-                    onClick={() =>
-                      setQuizAnswers((answers) => ({ ...answers, [current]: index }))
-                    }
-                    type="button"
-                  >
-                    <span>{String.fromCharCode(65 + index)}</span>
-                    {option}
-                  </button>
-                ))}
-              </div>
-              {quizAnswers[current] !== undefined && (
-                <p className={quizCorrect ? "quiz-correct" : "quiz-incorrect"} role="status">
-                  {quizCorrect
-                    ? stage.question.correctFeedback || "Correct. This matches the step context."
-                    : stage.question.incorrectFeedback || "Review the step context above, then try again."}
-                </p>
-              )}
-            </fieldset>
-          )}
-
-          {stage.tip && (
-            <div className="tip-box">
-              <b>{stage.tipLabel || "Important"}</b>
-              <p>{stage.tip}</p>
+            <div className="practice-launch">
+              <button onClick={() => setPracticeOpen(true)} type="button">
+                Practice question
+              </button>
+              <span>{quizAnswers[current] === undefined ? "Optional" : "Answer saved"}</span>
             </div>
           )}
 
@@ -823,13 +774,11 @@ export default function App() {
             <span>
               <b>I completed this step.</b>
               <small>
-                {!quizCorrect
-                  ? "Practice is optional. Review the context if your answer was not correct."
-                  : !studentInfoComplete
-                    ? "Enter the group members, group, and date to unlock this confirmation."
-                    : !finalSketchComplete
-                      ? "Paste your complete assembled Arduino sketch to unlock this confirmation."
-                      : "I can show or explain the required work."}
+                {!studentInfoComplete
+                  ? "Enter the group members, group, and date to unlock this confirmation."
+                  : !finalSketchComplete
+                    ? "Paste your complete assembled Arduino sketch to unlock this confirmation."
+                    : "I can show or explain the required work."}
               </small>
             </span>
           </label>
@@ -849,6 +798,58 @@ export default function App() {
         </nav>
         {!confirmed[current] && <p className="unlock-note">Confirm the step above to unlock Next.</p>}
       </section>
+
+      {practiceOpen && stage.question && (
+        <div
+          className="modal-backdrop"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setPracticeOpen(false);
+          }}
+          role="presentation"
+        >
+          <section
+            aria-labelledby="practice-question-title"
+            aria-modal="true"
+            className="practice-modal"
+            role="dialog"
+          >
+            <button
+              aria-label="Close practice question"
+              autoFocus
+              className="modal-close"
+              onClick={() => setPracticeOpen(false)}
+              type="button"
+            >
+              ×
+            </button>
+            <span className="practice-label">Optional practice</span>
+            <h2 id="practice-question-title">{stage.question.text}</h2>
+            <div className="quiz-options">
+              {stage.question.options.map((option, index) => (
+                <button
+                  aria-pressed={quizAnswers[current] === index}
+                  className={quizAnswers[current] === index ? "selected" : ""}
+                  key={option}
+                  onClick={() =>
+                    setQuizAnswers((answers) => ({ ...answers, [current]: index }))
+                  }
+                  type="button"
+                >
+                  <span>{String.fromCharCode(65 + index)}</span>
+                  {option}
+                </button>
+              ))}
+            </div>
+            {quizAnswers[current] !== undefined && (
+              <p className={quizCorrect ? "quiz-correct" : "quiz-incorrect"} role="status">
+                {quizCorrect
+                  ? stage.question.correctFeedback || "Correct. This matches the explanation."
+                  : stage.question.incorrectFeedback || "Close this practice, read the explanation, and try again."}
+              </p>
+            )}
+          </section>
+        </div>
+      )}
     </main>
   );
 }
