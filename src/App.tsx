@@ -10,7 +10,7 @@ type Stage = {
   instruction: string;
   checks?: string[];
   code?: string;
-  image?: "connection" | "selector";
+  image?: "servo" | "selector";
   video?: boolean;
   question?: {
     text: string;
@@ -64,7 +64,7 @@ const stages: Stage[] = [
       "The servo signal is connected to pin 3.",
       "The connector orientation is correct and secure.",
     ],
-    image: "connection",
+    image: "servo",
   },
   {
     short: "Set Pot1",
@@ -606,14 +606,32 @@ export default function App() {
             </button>
           </div>
           <div className="hero-visual">
-            <Image
-              alt="Freenove board with Pot1 beside a servo"
-              height={1024}
-              priority
-              src="assets/freenove-pot1-servo.svg"
-              width={1536}
-            />
-            <div className="visual-flow"><span>INPUT · A1</span><i /><b>YOU BUILD THE LOGIC</b><i /><span>OUTPUT · PIN 3</span></div>
+            <div className="hero-components">
+              <figure>
+                <Image
+                  alt="Potentiometer used as the Pot1 input"
+                  height={700}
+                  priority
+                  src="assets/potentiometer.png"
+                  width={700}
+                />
+                <figcaption>Pot1 · Input A1</figcaption>
+              </figure>
+              <div className="component-flow" aria-hidden="true">
+                <span>Arduino changes the value</span>
+                <b>→</b>
+              </div>
+              <figure>
+                <Image
+                  alt="Blue SG90 servo motor used as the output"
+                  height={300}
+                  priority
+                  src="assets/sg90-servo.png"
+                  width={400}
+                />
+                <figcaption>Servo · Output pin 3</figcaption>
+              </figure>
+            </div>
           </div>
         </section>
       </main>
@@ -718,15 +736,15 @@ export default function App() {
                 alt={
                   stage.image === "selector"
                     ? "Freenove manual selector diagram showing switch 1 for Pot1 and A1 moved to ON"
-                    : "Freenove board and servo connection reference"
+                    : "Blue SG90 servo motor with its three-wire connector"
                 }
-                height={stage.image === "selector" ? 330 : 1024}
+                height={stage.image === "selector" ? 330 : 300}
                 src={
                   stage.image === "selector"
                     ? "assets/pot1-a1-selector-manual.svg"
-                    : "assets/freenove-pot1-servo.svg"
+                    : "assets/sg90-servo.png"
                 }
-                width={stage.image === "selector" ? 360 : 1536}
+                width={stage.image === "selector" ? 360 : 400}
               />
               {stage.image === "selector" && (
                 <p className="manual-caption">
