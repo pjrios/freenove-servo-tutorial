@@ -264,14 +264,20 @@ button { cursor: pointer; }
 }
 .connection-visual img { max-width: 100%; object-fit: contain; }
 .connection-visual .selector-image { height: 300px; width: 100%; }
-.connection-reference-list { display: grid; gap: 28px; width: 100%; }
-.connection-reference-list figure { margin: 0; text-align: center; }
-.connection-reference-list figure + figure {
+.connection-reference-list,
+.monitor-reference-list { display: grid; gap: 28px; width: 100%; }
+.connection-reference-list figure,
+.monitor-reference-list figure { margin: 0; text-align: center; }
+.connection-reference-list figure + figure,
+.monitor-reference-list figure + figure {
   border-top: 1px solid var(--line);
   padding-top: 28px;
 }
 .connection-reference-list img { height: auto; width: min(750px, 100%); }
-.connection-reference-list figcaption {
+.monitor-reference-list img { height: auto; width: 100%; }
+.monitor-reference-list figure:first-child img { width: min(620px, 100%); }
+.connection-reference-list figcaption,
+.monitor-reference-list figcaption {
   color: var(--ink);
   font-size: 15px;
   font-weight: 800;

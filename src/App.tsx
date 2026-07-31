@@ -10,7 +10,7 @@ type Stage = {
   instruction: string;
   checks?: string[];
   code?: string;
-  image?: "servo" | "selector";
+  image?: "servo" | "selector" | "monitor";
   video?: boolean;
   question?: {
     text: string;
@@ -285,6 +285,7 @@ const stages: Stage[] = [
       "Each line displays a potentiometer value and servo angle.",
       "As the potentiometer value increases, the mapped angle also increases.",
     ],
+    image: "monitor",
     question: {
       text: "What angle should an ADC value near 512 produce?",
       options: [
@@ -762,6 +763,27 @@ export default function App() {
                     From the Freenove manual: move selector <b>1</b> (Pot1 / A1) toward <b>ON</b>.
                   </p>
                 </>
+              ) : stage.image === "monitor" ? (
+                <div className="monitor-reference-list">
+                  <figure>
+                    <Image
+                      alt="Serial Monitor button in Arduino IDE"
+                      height={180}
+                      src="assets/serial-monitor-button.png"
+                      width={620}
+                    />
+                    <figcaption>1. Select the Serial Monitor button in Arduino IDE.</figcaption>
+                  </figure>
+                  <figure>
+                    <Image
+                      alt="Arduino Serial Monitor showing potentiometer values, servo angles, and 9600 baud"
+                      height={754}
+                      src="assets/serial-monitor-output.png"
+                      width={2864}
+                    />
+                    <figcaption>2. Set 9600 baud and check that both values appear.</figcaption>
+                  </figure>
+                </div>
               ) : (
                 <div className="connection-reference-list">
                   <figure>
