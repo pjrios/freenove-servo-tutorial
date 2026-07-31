@@ -250,7 +250,9 @@ button { cursor: pointer; }
   background: #f5f9fc; border: 1px solid var(--line); border-radius: 12px;
   align-items: center; display: flex; flex-direction: column; justify-content: center; margin: 28px 0; padding: 22px;
 }
-.connection-visual img { height: 300px; max-width: 100%; object-fit: contain; width: 100%; }
+.connection-visual img { max-width: 100%; object-fit: contain; }
+.connection-visual .servo-connection-image { height: auto; width: min(750px, 100%); }
+.connection-visual .selector-image { height: 300px; width: 100%; }
 .manual-caption {
   color: var(--muted); font-size: 14px; line-height: 1.5; margin: 14px 0 0; text-align: center;
 }
@@ -545,7 +547,7 @@ button { cursor: pointer; }
   .hero-components img { height: 180px; }
   .component-flow { display: none; }
   .hero-components figcaption { font-size: 10px; }
-  .connection-visual img { height: 220px; }
+  .connection-visual .selector-image { height: 220px; }
 }
 
 @media print {

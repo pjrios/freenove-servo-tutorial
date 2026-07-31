@@ -736,15 +736,16 @@ export default function App() {
                 alt={
                   stage.image === "selector"
                     ? "Freenove manual selector diagram showing switch 1 for Pot1 and A1 moved to ON"
-                    : "Blue SG90 servo motor with its three-wire connector"
+                    : "Servo connector labeled GND, VCC, and SIGNAL"
                 }
-                height={stage.image === "selector" ? 330 : 300}
+                className={stage.image === "selector" ? "selector-image" : "servo-connection-image"}
+                height={stage.image === "selector" ? 330 : 422}
                 src={
                   stage.image === "selector"
                     ? "assets/pot1-a1-selector-manual.svg"
-                    : "assets/sg90-servo.png"
+                    : "assets/servo-connections.png"
                 }
-                width={stage.image === "selector" ? 360 : 400}
+                width={stage.image === "selector" ? 360 : 750}
               />
               {stage.image === "selector" && (
                 <p className="manual-caption">
