@@ -7,11 +7,12 @@ type Stage = {
   short: string;
   eyebrow: string;
   title: string;
-  learningGoal: string;
+  learningGoal?: string;
   instruction: string;
   checks?: string[];
   code?: string;
   tip?: string;
+  tipLabel?: string;
   image?: "connection" | "selector";
   video?: boolean;
   question?: {
@@ -28,7 +29,6 @@ const stages: Stage[] = [
     short: "Prepare",
     eyebrow: "Step 1 · Before touching the board",
     title: "Get ready",
-    learningGoal: "Prepare your materials and work safely before the board has power.",
     instruction:
       "Before building, make sure your work area is ready. The board should stay disconnected from USB until the tutorial tells you to connect it.",
     checks: [
@@ -36,7 +36,6 @@ const stages: Stage[] = [
       "Have your computer, charger, Arduino IDE, and assigned document ready.",
       "Keep the Freenove board disconnected from USB.",
     ],
-    tip: "This step prevents connection mistakes before the board has power.",
   },
   {
     short: "Meet Servo",
@@ -57,13 +56,11 @@ const stages: Stage[] = [
       correctFeedback: "Correct. The signal tells the servo which angle to move to.",
       incorrectFeedback: "Review the context above, then try again.",
     },
-    tip: "The practice question helps you check your understanding, but it does not block the next step.",
   },
   {
     short: "Connect",
     eyebrow: "Step 3 · Hardware",
     title: "Connect only the servo",
-    learningGoal: "Identify the servo wires and connect the servo safely.",
     instruction:
       "The servo has three wires: ground, power, and signal. Connect it to the three-pin servo connector for pin 3 while the board is still disconnected.",
     checks: [
@@ -72,6 +69,7 @@ const stages: Stage[] = [
       "The connector orientation is correct and secure.",
     ],
     tip: "If it does not slide in easily, stop and ask for help.",
+    tipLabel: "Safety",
     image: "connection",
   },
   {
@@ -86,7 +84,6 @@ const stages: Stage[] = [
       "Switch 1, labeled Pot1 and A1, is moved to the ON side.",
       "No unnecessary wires were added.",
     ],
-    tip: "Pot1 will be the input. The servo will be the output.",
     image: "selector",
   },
   {
@@ -103,7 +100,6 @@ const stages: Stage[] = [
       "If it is missing, open Tools → Manage Libraries… (or the Library Manager icon).",
       "Search for Servo, choose the official Servo library by Arduino, and select Install.",
     ],
-    tip: "When your sketch later uses #include <Servo.h>, it is asking Arduino IDE to load the Servo library.",
   },
   {
     short: "Include",
@@ -122,7 +118,6 @@ const stages: Stage[] = [
       ],
       correct: 0,
     },
-    tip: "The library gives Arduino the instructions needed to control a servo.",
   },
   {
     short: "Pins",
@@ -141,7 +136,6 @@ const stages: Stage[] = [
       ],
       correct: 0,
     },
-    tip: "const means these pin numbers will not change while the program runs.",
   },
   {
     short: "Setup",
@@ -160,7 +154,6 @@ const stages: Stage[] = [
       ],
       correct: 0,
     },
-    tip: "This tells the Servo object which physical signal pin it controls.",
   },
   {
     short: "Start Serial",
@@ -179,7 +172,6 @@ const stages: Stage[] = [
       ],
       correct: 0,
     },
-    tip: "9600 is the baud rate—the communication speed used by both the board and Serial Monitor.",
   },
   {
     short: "Read",
@@ -198,7 +190,6 @@ const stages: Stage[] = [
       ],
       correct: 0,
     },
-    tip: "Remember the Arduino analog range: 0 to 1023.",
   },
   {
     short: "Map",
@@ -218,6 +209,7 @@ const stages: Stage[] = [
       correct: 0,
     },
     tip: "map() converts the input scale; it does not move the servo by itself.",
+    tipLabel: "Code note",
   },
   {
     short: "Move",
@@ -236,7 +228,6 @@ const stages: Stage[] = [
       ],
       correct: 0,
     },
-    tip: "The servo expects an angle, not a raw analog value from 0 to 1023.",
   },
   {
     short: "Print ADC",
@@ -255,7 +246,6 @@ const stages: Stage[] = [
       ],
       correct: 0,
     },
-    tip: "This lets you see the actual input value from 0 to 1023.",
   },
   {
     short: "Print Angle",
@@ -275,12 +265,12 @@ const stages: Stage[] = [
       correct: 0,
     },
     tip: "Each line will now show one input–output pair, such as Potentiometer: 512 | Servo angle: 90.",
+    tipLabel: "Example",
   },
   {
     short: "Complete Code",
     eyebrow: "Step 15 · Assemble your work",
     title: "Show your complete sketch",
-    learningGoal: "Combine the code pieces and check that the full sketch is complete.",
     instruction:
       "You have now built the sketch one piece at a time. Paste the complete program here so you can review it before uploading.",
     checks: [
@@ -291,12 +281,12 @@ const stages: Stage[] = [
       "All parentheses, semicolons, and closing braces are present.",
     ],
     tip: "Do not replace your work with code from another source. This field should show the program you built one piece at a time.",
+    tipLabel: "Your work",
   },
   {
     short: "Upload",
     eyebrow: "Step 16 · Arduino IDE",
     title: "Verify and upload",
-    learningGoal: "Check the sketch for errors and send it to the correct board.",
     instruction:
       "Now connect the USB cable. Select the correct board and port, then verify and upload the sketch.",
     checks: [
@@ -305,7 +295,8 @@ const stages: Stage[] = [
       "The sketch verifies without errors.",
       "The sketch uploads successfully.",
     ],
-    tip: "If verification fails, compare your sketch with each code piece one stage at a time.",
+    tip: "If verification fails, compare your sketch with each code piece one step at a time.",
+    tipLabel: "If there is an error",
   },
   {
     short: "Monitor",
@@ -330,12 +321,12 @@ const stages: Stage[] = [
       correct: 0,
     },
     tip: "Approximately: 0 → 0°, 256 → 45°, 512 → 90°, 768 → 135°, and 1023 → 180°.",
+    tipLabel: "Useful values",
   },
   {
     short: "Test",
     eyebrow: "Step 18 · Evidence",
     title: "Complete three controlled tests",
-    learningGoal: "Collect clear evidence that the system works at low, middle, and high positions.",
     instruction:
       "Test the system in three positions: low, middle, and high. Use real values from the Serial Monitor.",
     checks: [
@@ -382,7 +373,6 @@ const stages: Stage[] = [
     short: "Submit",
     eyebrow: "Step 20 · Final check",
     title: "Save, demonstrate, and submit",
-    learningGoal: "Present your group's finished work and evidence clearly.",
     instruction:
       "Before asking for evaluation, make sure your code, test evidence, demonstration, and workspace are ready.",
     checks: [
@@ -392,7 +382,6 @@ const stages: Stage[] = [
       "The live demonstration and English explanation are ready.",
       "The workspace is organized and all equipment will be returned correctly.",
     ],
-    tip: "The complete activity is worth 40 points.",
   },
 ];
 
@@ -558,7 +547,9 @@ export default function App() {
                       </span>
                       <b>Step {index + 1}: {item.title}</b>
                     </div>
-                    <p><b>Learning goal:</b> {item.learningGoal}</p>
+                    {item.learningGoal && (
+                      <p><b>Learning goal:</b> {item.learningGoal}</p>
+                    )}
                     <p><b>Context:</b> {item.instruction}</p>
                     {item.checks && (
                       <ul>
@@ -664,10 +655,12 @@ export default function App() {
           <div className="stage-count">Step {current + 1} of {stages.length}</div>
           <p className="step-eyebrow">{stage.eyebrow}</p>
           <h1>{stage.title}</h1>
-          <section className="learning-goal" aria-label="Learning goal">
-            <span>What you will learn</span>
-            <p>{stage.learningGoal}</p>
-          </section>
+          {stage.learningGoal && (
+            <section className="learning-goal" aria-label="Learning goal">
+              <span>What you will learn</span>
+              <p>{stage.learningGoal}</p>
+            </section>
+          )}
           <section className="context-box" aria-label="Step context">
             <span>Step context</span>
             <p>{stage.instruction}</p>
@@ -813,7 +806,12 @@ export default function App() {
             </fieldset>
           )}
 
-          {stage.tip && <div className="tip-box"><b>Remember</b><p>{stage.tip}</p></div>}
+          {stage.tip && (
+            <div className="tip-box">
+              <b>{stage.tipLabel || "Important"}</b>
+              <p>{stage.tip}</p>
+            </div>
+          )}
 
           <label className="confirmation">
             <input
